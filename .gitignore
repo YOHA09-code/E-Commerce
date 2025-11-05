@@ -40,4 +40,42 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# Prisma
+node_modules/.prisma/
+prisma/dev.db
+prisma/migrations/
+
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+.next/
+out/
+dist/
+
+# Logs
+logs
+*.log
+
+# IDE folders
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Cursor & VSCode temp files
+.cursorrules
+.cursorignore
+
 /src/generated/prisma
