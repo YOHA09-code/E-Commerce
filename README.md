@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🇪🇹 EthioShop - Ethiopian E-Commerce Platform
 
 A production-ready, full-stack e-commerce platform specifically designed for the Ethiopian market, built with Next.js 14, React 18, TypeScript, and PostgreSQL.
@@ -307,3 +308,7 @@ For support, email support@ethioshop.com or join our Discord community.
 ---
 
 **Built with ❤️ for the Ethiopian market**
+=======
+# E-Commerce
+E-Commerce Website for Ethiopia's Market
+>>>>>>> 9e393c116b1f6657709b4221f318ffcdb5395e40
