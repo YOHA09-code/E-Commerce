@@ -1,0 +1,389 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication and user management
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          UserRole  @default(CUSTOMER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  vendor        Vendor?
+  orders        Order[]
+  reviews       Review[]
+  cartItems     CartItem[]
+  addresses     Address[]
+  auditLogs     AuditLog[]
+
+  @@map("users")
+}
+
+// NextAuth.js required models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?  @db.Text
+  access_token      String?  @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?  @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// Vendor model for business management
+model Vendor {
+  id          String      @id @default(cuid())
+  userId      String      @unique
+  businessName String
+  businessType String
+  description String?
+  phone       String?
+  website     String?
+  address     String?
+  city        String?
+  region      String?
+  country     String      @default("Ethiopia")
+  verified    Boolean     @default(false)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products    Product[]
+  orders      Order[]
+
+  @@map("vendors")
+}
+
+// Category model for product organization
+model Category {
+  id          String     @id @default(cuid())
+  name        String
+  nameAm      String?    // Amharic name
+  description String?
+  descriptionAm String?  // Amharic description
+  slug        String     @unique
+  image       String?
+  parentId    String?
+  isActive    Boolean    @default(true)
+  sortOrder   Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  parent      Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+  products    Product[]
+
+  @@map("categories")
+}
+
+// Product model for catalog management
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  nameAm      String?     // Amharic name
+  description String      @db.Text
+  descriptionAm String?   @db.Text // Amharic description
+  slug        String      @unique
+  sku         String      @unique
+  price       Decimal     @db.Decimal(10, 2)
+  comparePrice Decimal?   @db.Decimal(10, 2)
+  costPrice   Decimal?    @db.Decimal(10, 2)
+  stock       Int         @default(0)
+  minStock    Int         @default(0)
+  weight      Decimal?    @db.Decimal(8, 2)
+  dimensions  String?     // JSON string for length, width, height
+  images      String[]    // Array of image URLs
+  tags        String[]    // Array of tags
+  isActive    Boolean     @default(true)
+  isDigital   Boolean     @default(false)
+  isFeatured  Boolean     @default(false)
+  sortOrder   Int         @default(0)
+  seoTitle    String?
+  seoDescription String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  vendorId    String
+  categoryId  String
+  vendor      Vendor      @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  category    Category    @relation(fields: [categoryId], references: [id])
+  variants    ProductVariant[]
+  orderItems  OrderItem[]
+  reviews     Review[]
+  cartItems   CartItem[]
+
+  @@map("products")
+}
+
+// Product variants (size, color, etc.)
+model ProductVariant {
+  id        String   @id @default(cuid())
+  name      String   // e.g., "Size", "Color"
+  value     String   // e.g., "Large", "Red"
+  nameAm    String?  // Amharic name
+  valueAm   String?  // Amharic value
+  price     Decimal? @db.Decimal(10, 2) // Additional price
+  stock     Int      @default(0)
+  sku      String?  @unique
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_variants")
+}
+
+// Customer addresses
+model Address {
+  id          String    @id @default(cuid())
+  userId      String
+  type        AddressType @default(SHIPPING)
+  firstName   String
+  lastName    String
+  company     String?
+  address1    String
+  address2    String?
+  city        String
+  region      String
+  postalCode  String?
+  country     String    @default("Ethiopia")
+  phone       String?
+  isDefault   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders      Order[]
+
+  @@map("addresses")
+}
+
+// Shopping cart
+model CartItem {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  quantity  Int      @default(1)
+  variantId String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId, variantId])
+  @@map("cart_items")
+}
+
+// Order management
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique
+  userId          String
+  vendorId        String
+  addressId       String?     // Optional address reference
+  status          OrderStatus @default(PENDING)
+  subtotal        Decimal     @db.Decimal(10, 2)
+  taxAmount       Decimal     @db.Decimal(10, 2) @default(0)
+  shippingAmount  Decimal     @db.Decimal(10, 2) @default(0)
+  discountAmount  Decimal     @db.Decimal(10, 2) @default(0)
+  total           Decimal     @db.Decimal(10, 2)
+  currency        String      @default("ETB")
+  notes           String?
+  shippingAddress String      // JSON string
+  billingAddress  String?     // JSON string
+  trackingNumber  String?
+  shippedAt       DateTime?
+  deliveredAt     DateTime?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Relations
+  user            User        @relation(fields: [userId], references: [id])
+  vendor          Vendor      @relation(fields: [vendorId], references: [id])
+  address         Address?    @relation(fields: [addressId], references: [id])
+  items           OrderItem[]
+  payments        Payment[]
+
+  @@map("orders")
+}
+
+// Order items
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Decimal  @db.Decimal(10, 2)
+  variantId String?
+  createdAt DateTime @default(now())
+
+  // Relations
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+// Payment processing
+model Payment {
+  id            String        @id @default(cuid())
+  orderId       String
+  amount        Decimal       @db.Decimal(10, 2)
+  currency      String        @default("ETB")
+  provider      PaymentProvider
+  providerId    String?      // External payment ID
+  status        PaymentStatus @default(PENDING)
+  method        PaymentMethod
+  transactionId String?
+  metadata      String?      // JSON string for additional data
+  processedAt   DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  // Relations
+  order         Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+// Product reviews and ratings
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  rating    Int      // 1-5 stars
+  title     String?
+  comment   String?  @db.Text
+  commentAm String?  @db.Text // Amharic comment
+  isVerified Boolean @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("reviews")
+}
+
+// Audit logging for compliance and security
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String   // e.g., "CREATE_PRODUCT", "UPDATE_ORDER"
+  entity    String   // e.g., "Product", "Order"
+  entityId  String?  // ID of the affected entity
+  oldValues String?  // JSON string of old values
+  newValues String?  // JSON string of new values
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  // Relations
+  user      User?    @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
+}
+
+// Enums
+enum UserRole {
+  CUSTOMER
+  VENDOR
+  ADMIN
+}
+
+enum AddressType {
+  SHIPPING
+  BILLING
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentProvider {
+  CHAPA
+  STRIPE
+  PAYPAL
+  CASH_ON_DELIVERY
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CARD
+  BANK_TRANSFER
+  MOBILE_MONEY
+  CASH_ON_DELIVERY
+  WALLET
+}

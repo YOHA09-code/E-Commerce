@@ -1,0 +1,160 @@
+# Cursor Project Rule: Ethiopian E-Commerce Platform (AliExpress Clone)
+
+## 🎯 Project Goal
+
+Transform this Next.js Prisma project into a **fully functional, production-grade ecommerce platform** for **Ethiopian vendors** and **global buyers**, inspired by **AliExpress** and **Alibaba** in design, UX, and functionality.
+
+## 🏗️ Core Technologies
+
+- **Next.js 16 (App Router)** with **TypeScript**
+- **TailwindCSS + ShadCN/UI + Framer Motion**
+- **Prisma ORM** with **PostgreSQL**
+- **NextAuth.js** for authentication (email/password + Google)
+- **React Query / TanStack Query** for client-side data fetching
+- **Zustand** for cart & global UI states
+- **i18next (react-i18next)** for language support (English 🇬🇧 + Amharic 🇪🇹)
+- **Stripe / Chapa** for payments
+- **Socket.io / Pusher** for live chat and order updates
+- **Cloudinary** for product image uploads
+- **Vercel or Railway** for deployment
+
+---
+
+## 🧩 Required Features
+
+### 🌐 1. Landing Page
+
+- Professional, high-impact hero section with promotional banners and smooth animations.
+- Search bar, featured categories, trending products, and flash sales.
+- Tailwind + Framer Motion animations for smooth transitions.
+- Fully responsive (mobile-first, grid-based).
+
+### 👥 2. User Roles
+
+- **Vendor:** create account, manage products, view sales dashboard, process orders, manage delivery.
+- **Buyer:** browse, add to cart, checkout, view order history, chat with vendor.
+- **Admin:** manage all users, products, orders, and content.
+
+### 🛒 3. Product & Cart System
+
+- Product pages with multiple images, descriptions, and variants.
+- Dynamic pricing, stock levels, and reviews.
+- Functional **Add to Cart**, **Wishlist**, and **Buy Now** buttons.
+- Persist cart via Zustand + localStorage.
+- Detailed checkout flow (address, payment, confirmation).
+
+### 💳 4. Payment & Orders
+
+- Integration with **Stripe** (for international) and **Chapa** (for Ethiopian market).
+- Generate unique order IDs.
+- Update order status automatically.
+- Order history with filtering and pagination.
+
+### 💬 5. Real-time Chat
+
+- Vendor ↔ Buyer messaging using Socket.io or Pusher.
+- Display unread message count.
+- Realtime order update notifications.
+
+### 🌍 6. Multi-language Support
+
+- Default language: English.
+- Language switcher (English ↔ Amharic) in header.
+- Entire UI (navigation, product labels, buttons, etc.) translated.
+- Persist selected language in localStorage and cookies.
+- Fix hydration and Hook-order errors (SSR-safe language switcher).
+
+### 🧑‍🎨 7. UI / UX Polish
+
+- Every page must be fully styled, responsive, and professional.
+- Add hover states, transitions, shadows, and grid alignment.
+- Maintain consistency with AliExpress UX patterns.
+- Use proper empty-state and loading skeletons.
+
+### 📱 8. Responsiveness
+
+- Optimize layouts for phones, tablets, and desktops.
+- Ensure images are optimized via `next/image`.
+
+### 🔍 9. Search & Filtering
+
+- Product search by name, category, vendor, or tag.
+- Filter by price, rating, and shipping method.
+
+### 🧰 10. Error Handling & Debug
+
+- Eliminate all console errors and SSR hydration issues.
+- Ensure no unhandled runtime or TypeScript errors.
+- Add centralized error boundary and toast notifications.
+
+---
+
+## 🧑‍💻 Cursor Instructions
+
+When asked to update code:
+
+1. **Always maintain project functionality** — never break build or runtime.
+2. **Refactor gradually** if a change touches multiple layers (UI, API, DB).
+3. Ensure every component has **SSR-safe** hooks (especially for client-only code).
+4. Maintain clean, modular architecture:
+   - `src/app` → pages/routes
+   - `src/components` → UI components
+   - `src/lib` → utilities (auth, db, i18n, store)
+   - `src/server` → API and Prisma logic
+5. Prioritize:
+   - ✅ No runtime errors
+   - ✅ No hydration warnings
+   - ✅ Clean console
+   - ✅ Fully functional features
+
+---
+
+## 🧠 Design & UX Inspiration
+
+Replicate the layout and user experience of:
+
+- [https://www.aliexpress.com/](https://www.aliexpress.com/)
+- [https://www.alibaba.com/](https://www.alibaba.com/)
+
+Use similar:
+
+- Navbar layout (categories, search, account, cart)
+- Product grid & detail page design
+- Checkout flow
+- Vendor dashboard analytics
+
+---
+
+RULE: When improving UI or fixing errors,
+
+- Always use Tailwind colors from tailwind.config.js (primary = #FF5A00, etc.)
+- Never use pure yellow backgrounds or text.
+- Ensure all motion components run inside "use client" files.
+- Add placeholder data or loading skeletons if lists are empty.
+- Verify every button and footer link has a valid route.
+- All pages must be mobile-responsive and use professional AliExpress-like design.
+- Automatically continue fixing issues until project builds and runs without console or runtime errors.
+
+## 🧩 Bonus Enhancements (if time allows)
+
+- AI-based product recommendations using similarity matching.
+- Coupon and discount system.
+- Review and rating system.
+- Delivery tracking (mock API integration).
+- Dark mode toggle.
+
+---
+
+## ✅ Final Deliverable
+
+- Fully functional, error-free e-commerce platform.
+- Runs with: `npm install && npx prisma db push && npm run dev`
+- No console warnings.
+- Modern, mobile-first design identical in flow to AliExpress.
+- English by default; language toggle works globally.
+- All buttons, links, and pages functional (no 404s).
+- Ready for production deployment to **Vercel** or **Railway**.
+
+---
+
+## alwaysApply: true

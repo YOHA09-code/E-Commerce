@@ -1,0 +1,463 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@300;400;500;600;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --radius: 0.75rem;
+
+  /* AliExpress-style commerce palette */
+  --commerce-orange: #ff5a00;
+  --commerce-orange-light: #ffb84d;
+  --commerce-green: #1f8a3d;
+  --commerce-green-light: #4caf50;
+
+  /* Light theme (default) - Ethiopia-inspired coffee & green tones */
+  --background: 253 247 240; /* Warm coffee cream - attractive light background */
+  --foreground: 17 24 39; /* Dark gray text */
+  --card: 255 255 255; /* White cards for contrast */
+  --card-foreground: 17 24 39;
+  --popover: 255 255 255;
+  --popover-foreground: 17 24 39;
+  --primary: 255 90 0; /* Commerce orange - warm and vibrant */
+  --primary-foreground: 255 255 255;
+  --secondary: 139 90 43; /* Coffee brown secondary */
+  --secondary-foreground: 255 255 255;
+  --muted: 245 239 229; /* Light coffee cream for muted backgrounds */
+  --muted-foreground: 139 90 43; /* Coffee brown text */
+  --accent: 31 138 61; /* Green */
+  --accent-foreground: 255 255 255;
+  --destructive: 220 38 38;
+  --destructive-foreground: 255 255 255;
+  --border: 218 200 180; /* Soft coffee-tinted border */
+  --input: 245 239 229; /* Light coffee cream input background */
+  --ring: 255 90 0;
+  --chart-1: 31 138 61;
+  --chart-2: 255 90 0;
+  --chart-3: 255 184 77;
+  --chart-4: 99 102 241;
+  --chart-5: 220 38 38;
+  --sidebar: 255 255 255;
+  --sidebar-foreground: 17 24 39;
+  --sidebar-primary: 255 90 0;
+  --sidebar-primary-foreground: 255 255 255;
+  --sidebar-accent: 249 250 251;
+  --sidebar-accent-foreground: 17 24 39;
+  --sidebar-border: 229 231 235;
+  --sidebar-ring: 255 90 0;
+}
+
+.dark {
+  /* Dark theme for AliExpress-style platform */
+  --background: 17 24 39;
+  --foreground: 249 250 251;
+  --card: 31 41 55;
+  --card-foreground: 249 250 251;
+  --popover: 31 41 55;
+  --popover-foreground: 249 250 251;
+  --primary: 255 90 0;
+  --primary-foreground: 255 255 255;
+  --secondary: 255 184 77;
+  --secondary-foreground: 17 24 39;
+  --muted: 31 41 55;
+  --muted-foreground: 156 163 175;
+  --accent: 76 175 80;
+  --accent-foreground: 255 255 255;
+  --destructive: 239 68 68;
+  --destructive-foreground: 255 255 255;
+  --border: 55 65 81;
+  --input: 55 65 81;
+  --ring: 255 90 0;
+  --chart-1: 76 175 80;
+  --chart-2: 255 90 0;
+  --chart-3: 255 184 77;
+  --chart-4: 139 92 246;
+  --chart-5: 239 68 68;
+  --sidebar: 31 41 55;
+  --sidebar-foreground: 249 250 251;
+  --sidebar-primary: 255 90 0;
+  --sidebar-primary-foreground: 255 255 255;
+  --sidebar-accent: 55 65 81;
+  --sidebar-accent-foreground: 249 250 251;
+  --sidebar-border: 55 65 81;
+  --sidebar-ring: 255 90 0;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  /* Ethiopian font for Amharic text */
+  .font-ethiopic {
+    font-family: "Noto Sans Ethiopic", sans-serif;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+}
+
+@layer components {
+  /* Custom button variants */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+      0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-all duration-200;
+  }
+
+  .btn-accent {
+    @apply bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-200;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  .btn-accent:hover {
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+      0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+
+  /* Card hover effects */
+  .card-hover {
+    @apply transition-all duration-300;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-0.25rem);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+      0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+
+  /* Gradient backgrounds */
+  .bg-gradient-ethiopian {
+    background: linear-gradient(
+      135deg,
+      oklch(0.35 0.15 120) 0%,
+      oklch(0.45 0.12 60) 100%
+    );
+  }
+
+  .bg-gradient-warm {
+    background: linear-gradient(
+      135deg,
+      rgb(253 247 240) 0%,
+      rgb(245 239 229) 50%,
+      rgb(240 235 225) 100%
+    );
+  }
+
+  /* Text gradients */
+  .text-gradient-primary {
+    background: linear-gradient(
+      135deg,
+      oklch(0.35 0.15 120),
+      oklch(0.45 0.12 60)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.6s ease-out;
+  }
+
+  .animate-bounce-gentle {
+    animation: bounceGentle 2s infinite;
+  }
+
+  /* Loading spinner */
+  .spinner {
+    @apply animate-spin rounded-full border-2 border-muted border-t-primary;
+  }
+
+  /* Focus styles */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  }
+
+  /* Ethiopian pattern overlay */
+  .pattern-overlay {
+    background-image: radial-gradient(
+        circle at 25px 25px,
+        oklch(0.35 0.15 120 / 0.1) 2px,
+        transparent 0
+      ),
+      radial-gradient(
+        circle at 75px 75px,
+        oklch(0.45 0.12 60 / 0.1) 2px,
+        transparent 0
+      );
+    background-size: 100px 100px;
+  }
+}
+
+@layer utilities {
+  /* Custom spacing */
+  .space-y-section > * + * {
+    margin-top: 5rem;
+  }
+
+  .space-y-content > * + * {
+    margin-top: 2rem;
+  }
+
+  /* Text shadows */
+  .text-shadow-sm {
+    text-shadow: 0 1px 2px oklch(0 0 0 / 0.1);
+  }
+
+  .text-shadow-md {
+    text-shadow: 0 2px 4px oklch(0 0 0 / 0.1);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px oklch(0 0 0 / 0.1);
+  }
+
+  /* Backdrop blur utilities */
+  .backdrop-blur-ethiopian {
+    backdrop-filter: blur(8px) saturate(1.2);
+  }
+
+  /* Shadow utilities for Tailwind v4 compatibility */
+  .shadow-sm {
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+
+  .shadow {
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  }
+
+  .shadow-md {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  .shadow-lg {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  .shadow-xl {
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+      0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+
+  .shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  }
+
+  .shadow-none {
+    box-shadow: none;
+  }
+
+  /* Animation utilities for Tailwind v4 compatibility */
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-bounce {
+    animation: bounce 1s infinite;
+  }
+
+  .animate-ping {
+    animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  /* Transform utilities for Tailwind v4 compatibility */
+  .-translate-y-1\/2 {
+    transform: translateY(-50%);
+  }
+
+  .-translate-x-1\/2 {
+    transform: translateX(-50%);
+  }
+
+  .translate-x-1\/2 {
+    transform: translateX(50%);
+  }
+
+  .translate-y-1\/2 {
+    transform: translateY(50%);
+  }
+
+  .-translate-y-1 {
+    transform: translateY(-0.25rem);
+  }
+
+  .translate-y-1 {
+    transform: translateY(0.25rem);
+  }
+
+  .-translate-x-1 {
+    transform: translateX(-0.25rem);
+  }
+
+  .translate-x-1 {
+    transform: translateX(0.25rem);
+  }
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounceGentle {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Responsive typography */
+@media (max-width: 640px) {
+  .text-responsive-xl {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
+
+  .text-responsive-lg {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}
+
+@media (min-width: 641px) {
+  .text-responsive-xl {
+    font-size: 3rem;
+    line-height: 3.5rem;
+  }
+
+  .text-responsive-lg {
+    font-size: 2rem;
+    line-height: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .text-responsive-xl {
+    font-size: 4rem;
+    line-height: 4.5rem;
+  }
+
+  .text-responsive-lg {
+    font-size: 2.5rem;
+    line-height: 3rem;
+  }
+}
